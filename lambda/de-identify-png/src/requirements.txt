@@ -1,1 +1,3 @@
+imageio
+matplotlib
 pillow
