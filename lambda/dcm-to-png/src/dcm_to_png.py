@@ -1,12 +1,8 @@
-
+import boto3
 import numpy as np
 import os
 from PIL import Image
 import pydicom
-import numpy as np
-import pydicom
-from PIL import ImageTk, Image
-
 
 
 def get_env_vars():
@@ -31,25 +27,25 @@ def lambda_handler(event, context):
     # get environment variables
     get_env_vars()
 
-    # read DCM file into pixel array
-    ds = pydicom.dcmread('../input/image.dcm')
+    # read DCM file into float pixel array
+    ds = pydicom.dcmread('../data/image.dcm')
     new_image = ds.pixel_array.astype(float)
 
     # scale the image in pixel array
     scaled_image = (np.maximum(new_image, 0) / new_image.max()) * 255.0
 
-    # convert int to unsigned int in pixel array
+    # convert to unsigned int pixel array
     scaled_image = np.uint8(scaled_image)
 
-    # extract image from pixel array
+    # extract image from unsigned int pixel array
     final_image = Image.fromarray(scaled_image)
 
     # DEBUG: display image
     final_image.show()
 
     # save image as JPG and PNG files
-    final_image.save('../output/image.jpg')
-    final_image.save('../output/image.png')
+    final_image.save('../data/image.jpg')
+    final_image.save('../data/image.png')
 
     # end
     print('\n... Thaaat\'s all, Folks!')
