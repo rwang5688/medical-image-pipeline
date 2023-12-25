@@ -1,23 +1,17 @@
-import boto3
-import io
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
-import numpy as np
+import config
 import os
-from PIL import Image
+import image_util
+import rekognition_util
 
 
 def get_env_vars():
-    global profile_name
-    global region_name
-
-    profile_name = ''
-    region_name = os.environ['AWS_REGION']
+    config.profile_name = ''
+    config.region_name = os.environ['AWS_REGION']
 
     # DEBUG
     print("get_env_vars:")
-    print("profile_name: %s" % (profile_name))
-    print("region_name: %s" % (region_name))
+    print("profile_name: %s" % (config.profile_name))
+    print("region_name: %s" % (config.region_name))
 
 
 def lambda_handler(event, context):
@@ -29,28 +23,24 @@ def lambda_handler(event, context):
     # get environment variables
     get_env_vars()
 
-    # input parameters
-    bucket='aws-ml-blog'
-    object='artifacts/de-id-medical-images/test.png'
-    redacted_box_color='red'
-    dpi = 72
-    phi_detection_threshold = 0.00
+    # function parameters
+    source_bucket_name = 'medical-images-png-1234567890ab-us-west-2'
+    source_prefix = 'data/'
+    source_object_name ='image.png'
+    config.dpi = 72
+    config.phi_detection_threshold = 0.00
+    config.redacted_box_color='red'
 
-    # open image and read into unsigned int pixel array
-    img = np.array(Image.open('../data/image.png'), dtype=np.uint8)
-
-    #Set the image color map to grayscale, turn off axis graphing, and display the image
-    height, width = img.shape
-    # What size does the figure need to be in inches to fit the image?
-    figsize = width / float(dpi), height / float(dpi)
-    # Create a figure of the right size with one axes that takes up the full figure
-    fig = plt.figure(figsize=figsize)
-    ax = fig.add_axes([0, 0, 1, 1])
-    # Hide spines, ticks, etc.
-    ax.axis('off')
-    # Display the image.
-    ax.imshow(img, cmap='gray')
-    plt.show()
+    # get image from S3 bucket object
+    img = image_util.get_image_from_s3_object(source_bucket_name, source_prefix, source_object_name)
+    
+    # get detected texts from S3 bucket object
+    success = rekognition_util.get_detected_texts_from_s3_object(source_bucket_name, source_prefix, source_object_name)
+    
+    print("text_block: %s" % (config.text_block))
+    print("offset_array: %s" % (config.offset_array))
+    print("total_length: %d" % (config.total_length))
+    print("total_offsets: %d" % (config.total_offsets))
 
     # end
     print('\n... Thaaat\'s all, Folks!')
