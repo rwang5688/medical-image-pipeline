@@ -28,7 +28,7 @@ def lambda_handler(event, context):
     get_env_vars()
 
     # read DCM file into float pixel array
-    ds = pydicom.dcmread('../input/image.dcm')
+    ds = pydicom.dcmread('../data/image.dcm')
     new_image = ds.pixel_array.astype(float)
 
     # scale the image in pixel array
@@ -44,8 +44,8 @@ def lambda_handler(event, context):
     final_image.show()
 
     # save image as JPG and PNG files
-    final_image.save('../output/image.jpg')
-    final_image.save('../output/image.png')
+    final_image.save('../data/image.jpg')
+    final_image.save('../data/image.png')
 
     # end
     print('\n... Thaaat\'s all, Folks!')

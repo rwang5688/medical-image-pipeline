@@ -37,7 +37,7 @@ def lambda_handler(event, context):
     phi_detection_threshold = 0.00
 
     # open image and read into unsigned int pixel array
-    img = np.array(Image.open('../input/image.png'), dtype=np.uint8)
+    img = np.array(Image.open('../data/image.png'), dtype=np.uint8)
 
     #Set the image color map to grayscale, turn off axis graphing, and display the image
     height, width = img.shape
