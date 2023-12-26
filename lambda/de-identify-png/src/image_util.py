@@ -26,7 +26,7 @@ def get_image_from_s3_object(source_bucket_name, source_prefix, source_object_na
     
     s3 = get_s3_resource()
     if s3 is None:
-        print('get_image_from_s3_bucket: Failed to get s3 resource.')
+        print('get_image_from_s3_object: Failed to get s3 resource.')
         return img
       
     try:
@@ -36,7 +36,7 @@ def get_image_from_s3_object(source_bucket_name, source_prefix, source_object_na
         stream = io.BytesIO()
         img_object.download_fileobj(stream)
     except ClientError as e:
-        logging.error("get_image_from_s3_bucket: unexpected error: ")
+        logging.error("get_image_from_s3_object: unexpected error: ")
         logging.exception(e)
         return img
        
@@ -54,7 +54,7 @@ def get_image_from_s3_object(source_bucket_name, source_prefix, source_object_na
     # Render the axis in grayscale
     ax.imshow(img, cmap='gray')
 
-    print('get_image_from_s3_bucket: Display raw image.')
+    print('get_image_from_s3_object: Display raw image.')
     plt.show()
 
     return img
@@ -74,7 +74,7 @@ def get_s3_client():
 def put_image_as_s3_object(image_file_name, dest_bucket_name, dest_prefix, dest_object_name):
     s3 = get_s3_client()
     if s3 is None:
-        print('put_image_to_s3_bucket: Failed to get s3 client.')
+        print('put_image_as_s3_object: Failed to get s3 client.')
         return False
     
     # If S3 object_name was not specified, use inage_file_name
@@ -85,7 +85,7 @@ def put_image_as_s3_object(image_file_name, dest_bucket_name, dest_prefix, dest_
     try:
         response = s3.upload_file(image_file_name, dest_bucket_name, dest_prefix+dest_object_name)
     except ClientError as e:
-        logging.error("put_image_to_s3_bucket: unexpected error: ")
+        logging.error("put_image_as_s3_object: unexpected error: ")
         logging.error(e)
         return False
     
