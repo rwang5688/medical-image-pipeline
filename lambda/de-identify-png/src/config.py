@@ -1,7 +1,24 @@
+# AWS parameters
 profile_name = ""
 region_name = ""
 
+# Pipeline parameters
+dpi = 72
+phi_detection_threshold = 0.00
+redacted_box_color = 'red'
+
+# Rekognition outputs
+detected_texts_list = None
 text_block = ""
-offset_array = []
 total_length = 0
-total_offsets = 0
+offset_array = [0,]
+total_offsets = 1
+
+# Comprehend Medical outputs
+detected_phi_list = None
+phi_scores_list = []
+phi_texts_list = []
+phi_types_list = []
+phi_boxes_list = []
+not_redacted = 0
+
