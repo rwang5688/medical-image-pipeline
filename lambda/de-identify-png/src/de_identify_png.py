@@ -37,10 +37,10 @@ def lambda_handler(event, context):
     source_bucket_name = 'medical-images-png-1234567890ab-us-west-2'
     source_prefix = 'data/'
     source_object_name ='image.png'
-    dest_bucket_name = 'medical-images-de-identified-png-1234567890ab-us-west-2'
+    dest_bucket_name = 'medical-images-de-id-png-1234567890ab-us-west-2'
     dest_prefix = 'data/'
-    dest_object_name ='de-identified-image.png'
-    
+    dest_object_name ='de-id-'+source_object_name
+
     # get detected texts and offsets from S3 bucket object
     success = rekognition_util.get_detected_texts_from_s3_object(source_bucket_name, source_prefix, source_object_name)
     if success:
@@ -66,9 +66,16 @@ def lambda_handler(event, context):
         print("not_redacted: %d" % (config.not_redacted))
         print("==")
 
-    # get image from S3 bucket object
+    # get image pixel array from S3 object
     img = image_util.get_image_from_s3_object(source_bucket_name, source_prefix, source_object_name)
 
+    # redact and put image pixel array as S3 object
+    success = image_util.redact_and_put_image_as_s3_object(img, dest_bucket_name, dest_prefix, dest_object_name)
+    if success:
+        print("==")
+        print("Successfully executed redact_and_put_image_as_s3_object ...")
+        print("==")
+    
     # end
     print('\n... Thaaat\'s all, Folks!')
 
