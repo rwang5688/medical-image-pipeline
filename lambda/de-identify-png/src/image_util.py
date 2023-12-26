@@ -66,12 +66,12 @@ def get_image_from_s3_object(source_bucket_name, source_prefix, source_object_na
 
 def redact_and_put_image_as_s3_object(img, dest_bucket_name, dest_prefix, dest_object_name):
     if img is None:
-        print('put_image_as_s3_object: Image is null object.')
+        print('redact_and_put_image_as_s3_object: Image is null object.')
         return False
     
     s3 = get_s3_resource()
     if s3 is None:
-        print('put_image_as_s3_object: Failed to get s3 resource.')
+        print('redact_and_put_image_as_s3_object: Failed to get s3 resource.')
         return False
     
     img_bucket = None
@@ -79,7 +79,7 @@ def redact_and_put_image_as_s3_object(img, dest_bucket_name, dest_prefix, dest_o
         # Get dest bucket resource
         img_bucket = s3.Bucket(dest_bucket_name)
     except ClientError as e:
-        logging.error("put_image_as_s3_object: unexpected error: ")
+        logging.error("redact_and_put_image_as_s3_object: unexpected error: ")
         logging.exception(e)
         return False
     
@@ -116,7 +116,7 @@ def redact_and_put_image_as_s3_object(img, dest_bucket_name, dest_prefix, dest_o
     img_data.seek(0)
     img_bucket.put_object(Body=img_data, ContentType='image/png', Key=dest_prefix+dest_object_name)
 
-    print('[DEBUG] put_image_as_s3_object: Display de-id image with redacted text boxes.')
+    print('[DEBUG] redact_and_put_image_as_s3_object: Display de-id image with redacted text boxes.')
     plt.show()
 
     return True

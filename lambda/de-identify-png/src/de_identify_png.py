@@ -24,14 +24,13 @@ def get_env_vars():
     print("redacted_box_color: %s" % (config.redacted_box_color))
 
 
-def lambda_handler(event, context):
-    # start
-    print('\nStarting de_identify_png.lambda_handler ...')
-    print("event: %s" % (event))
-    print("context: %s" % (context))
-
-    # get environment variables
-    get_env_vars()
+def get_event_vars(event):
+    global source_bucket_name
+    global source_prefix
+    global source_object_name
+    global dest_bucket_name
+    global dest_prefix
+    global dest_object_name
 
     # function input and output locations (should be from event)
     source_bucket_name = 'medical-images-png-1234567890ab-us-west-2'
@@ -40,6 +39,27 @@ def lambda_handler(event, context):
     dest_bucket_name = 'medical-images-de-id-png-1234567890ab-us-west-2'
     dest_prefix = 'data/'
     dest_object_name ='de-id-'+source_object_name
+
+    # DEBUG
+    print("source_bucket_name: %s" % (source_bucket_name))
+    print("source_prefix: %s" % (source_prefix))
+    print("source_object_name: %s" % (source_object_name))
+    print("dest_bucket_name: %s" % (dest_bucket_name))
+    print("dest_prefix: %s" % (dest_prefix))
+    print("dest_object_name: %s" % (dest_object_name))
+
+
+def lambda_handler(event, context):
+    # start
+    print('\nStarting de_identify_png.lambda_handler ...')
+    print("event: %s" % (event))
+    print("context: %s" % (context))
+
+    # get environment variables
+    get_env_vars()
+         
+    # get event variables
+    get_event_vars(event)
 
     # get detected texts and offsets from S3 bucket object
     success = rekognition_util.get_detected_texts_from_s3_object(source_bucket_name, source_prefix, source_object_name)
@@ -69,7 +89,7 @@ def lambda_handler(event, context):
     # get image pixel array from S3 object
     img = image_util.get_image_from_s3_object(source_bucket_name, source_prefix, source_object_name)
 
-    # redact and put image pixel array as S3 object
+    # redact and put image pixel array as S3 object in PNG format
     success = image_util.redact_and_put_image_as_s3_object(img, dest_bucket_name, dest_prefix, dest_object_name)
     if success:
         print("==")
