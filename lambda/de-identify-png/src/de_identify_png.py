@@ -33,7 +33,7 @@ def lambda_handler(event, context):
     # get environment variables
     get_env_vars()
 
-    # function parameters
+    # function input and output locations (should be from event)
     source_bucket_name = 'medical-images-png-1234567890ab-us-west-2'
     source_prefix = 'data/'
     source_object_name ='image.png'
