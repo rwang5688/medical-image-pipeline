@@ -26,6 +26,7 @@ data "archive_file" "lambda_zip" {
   depends_on = [null_resource.pip]
 }
 
+/*
 # API Gateway
 resource "aws_api_gateway_rest_api" "lambda_api" {
   name = "${var.lambda_api_name}"
@@ -59,17 +60,18 @@ resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = "${aws_api_gateway_rest_api.lambda_api.id}"
   stage_name  = "${var.api_stage_name}"
 }
+*/
 
 # Lambda
-resource "aws_lambda_permission" "lambda_apigw" {
-  statement_id  = "AllowExecutionFromAPIGateway"
-  action        = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.lambda.arn}"
-  principal     = "apigateway.amazonaws.com"
-
-  # More: http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
-  source_arn = "arn:aws:execute-api:${var.aws_region}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.lambda_api.id}/*/${aws_api_gateway_method.method.http_method}${aws_api_gateway_resource.resource.path}"
-}
+#resource "aws_lambda_permission" "lambda_apigw" {
+#  statement_id  = "AllowExecutionFromAPIGateway"
+#  action        = "lambda:InvokeFunction"
+#  function_name = "${aws_lambda_function.lambda.arn}"
+#  principal     = "apigateway.amazonaws.com"
+#
+#  # More: http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
+#  source_arn = "arn:aws:execute-api:${var.aws_region}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.lambda_api.id}/*/${aws_api_gateway_method.method.http_method}${aws_api_gateway_resource.resource.path}"
+#}
 
 resource "aws_lambda_function" "lambda" {
   filename         = "lambda.zip"

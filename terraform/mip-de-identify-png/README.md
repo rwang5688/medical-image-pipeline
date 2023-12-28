@@ -1,4 +1,4 @@
-# Basic Python Lambda function example
+# mip-de-identify-png Python Lambda function
 
 Configuration in this directory deploys simple python script to AWS Lambda. Script writes all requests into cloudwatch logs.
 
@@ -7,8 +7,8 @@ Configuration in this directory deploys simple python script to AWS Lambda. Scri
 To run this example you need to execute:
 ```bash
 $ terraform init
-$ terraform plan -out=basic.tfplan
-$ terraform apply -auto-approve basic.tfplan
+$ terraform plan -out=mip-de-identify-png.tfplan
+$ terraform apply -auto-approve mip-de-identify-png.tfplan
 ```
 
 Note that this configuration might create resources which cost money. Run `terraform destroy` when you don't need these resources anymore.
