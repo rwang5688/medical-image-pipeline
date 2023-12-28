@@ -14,6 +14,8 @@ resource "null_resource" "pip" {
   }
 
   provisioner "local-exec" {
+    # [wangrob]: Executing pip on Windows will results in packaging Windows OS specific function.
+    # This doesn't really work in Lambda runtime.  Will need to deploy in Linux environment again.
     command = "${var.pip_path} install -r ${path.root}/requirements.txt -t lambda/lib"
   }
 }
