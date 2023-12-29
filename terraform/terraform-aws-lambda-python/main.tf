@@ -93,19 +93,29 @@ resource "aws_iam_role" "lambda_iam" {
   assume_role_policy = "${file("${path.module}/policy.json")}"
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_policy" {
-    role       = "${aws_iam_role.lambda_iam.name}"
-    policy_arn = "arn:aws:iam::aws:policy/AWSLambda_FullAccess"
-}
-
 resource "aws_iam_role_policy_attachment" "logs_policy" {
     role       = "${aws_iam_role.lambda_iam.name}"
     policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+resource "aws_iam_role_policy_attachment" "lambda_policy" {
+    role       = "${aws_iam_role.lambda_iam.name}"
+    policy_arn = "arn:aws:iam::aws:policy/AWSLambda_FullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "rekognition_policy" {
+    role       = "${aws_iam_role.lambda_iam.name}"
+    policy_arn = "arn:aws:iam::aws:policy/AmazonRekognitionReadOnlyAccess"
+}
+
 resource "aws_iam_role_policy_attachment" "s3_policy" {
     role       = "${aws_iam_role.lambda_iam.name}"
     policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "comprehend_medical_policy" {
+    role       = "${aws_iam_role.lambda_iam.name}"
+    policy_arn = "arn:aws:iam::aws:policy/ComprehendMedicalFullAccess"
 }
 
 resource "aws_iam_role_policy" "additional_policy" {
