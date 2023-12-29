@@ -29,7 +29,7 @@ def convert_dicom_image_from_s3_object(source_bucket_name, source_object_prefix,
     
     try:
         # download the DCM image from S3 as a local file
-        with open(source_object_name, 'wb') as data:
+        with open('/tmp/'+source_object_name, 'wb') as data:
             source_object_key = source_object_prefix + source_object_name
             s3.download_fileobj(source_bucket_name, source_object_key, data)
     except ClientError as e:
@@ -51,9 +51,9 @@ def convert_dicom_image_from_s3_object(source_bucket_name, source_object_prefix,
     img = Image.fromarray(scaled_image)
 
     # DEBUG: Display image
-    # if not config.test:
-    print("[DEBUG] convert_dicom_image_from_s3_object: Display converted image.")
-    img.show()
+    if config.is_test:
+        print("[DEBUG] convert_dicom_image_from_s3_object: Display converted image.")
+        img.show()
 
     return img
 
@@ -71,10 +71,10 @@ def put_image_as_s3_object(img, dest_bucket_name, dest_object_prefix, dest_objec
     img_bucket = None
     try:
         # save image as local PNG file
-        img.save(dest_object_name)
+        img.save('/tmp/'+dest_object_name)
         # upload load PNG file to S3
         dest_object_key = dest_object_prefix + dest_object_name
-        response = s3.upload_file(dest_object_name, dest_bucket_name, dest_object_key)
+        response = s3.upload_file('/tmp/'+dest_object_name, dest_bucket_name, dest_object_key)
     except ClientError as e:
         logging.error("put_image_as_s3_object: unexpected error: ")
         logging.exception(e)

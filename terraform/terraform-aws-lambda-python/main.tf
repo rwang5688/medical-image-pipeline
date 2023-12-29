@@ -80,8 +80,10 @@ resource "aws_lambda_function" "lambda" {
   function_name    = "${var.lambda_name}"
   role             = "${aws_iam_role.lambda_iam.arn}"
   handler          = "main.lambda_handler"
+  memory_size      = 10240
   runtime          = "python3.9"
   source_code_hash = "${data.archive_file.lambda_zip.output_base64sha256}"
+  timeout          = 900
 }
 
 # IAM
@@ -91,9 +93,19 @@ resource "aws_iam_role" "lambda_iam" {
   assume_role_policy = "${file("${path.module}/policy.json")}"
 }
 
+resource "aws_iam_role_policy_attachment" "lambda_policy" {
+    role       = "${aws_iam_role.lambda_iam.name}"
+    policy_arn = "arn:aws:iam::aws:policy/AWSLambda_FullAccess"
+}
+
 resource "aws_iam_role_policy_attachment" "logs_policy" {
     role       = "${aws_iam_role.lambda_iam.name}"
     policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+resource "aws_iam_role_policy_attachment" "s3_policy" {
+    role       = "${aws_iam_role.lambda_iam.name}"
+    policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
 resource "aws_iam_role_policy" "additional_policy" {
