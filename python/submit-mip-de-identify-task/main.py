@@ -50,7 +50,7 @@ def lambda_handler(event, context):
 
     # **TO-DO**: get list of ddcm_object_keys based on patient id
     dcm_object_keys =[]
-    dcm_object_keys.append(config.dcm_object_prefix+config.dcm_objectname)
+    dcm_object_keys.append(config.dcm_object_prefix+config.dcm_object_name)
 
     # foreach dcm object, async invoke de-identify-png Lambda function
     for dcm_object_key in dcm_object_keys:
