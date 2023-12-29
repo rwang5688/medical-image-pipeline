@@ -50,10 +50,8 @@ def convert_dicom_image_from_s3_object(source_bucket_name, source_object_prefix,
     # extract image from unsigned int pixel array
     img = Image.fromarray(scaled_image)
 
-    # DEBUG: Display image
-    if config.is_test:
-        print("[DEBUG] convert_dicom_image_from_s3_object: Display converted image.")
-        img.show()
+    print("[DEBUG] convert_dicom_image_from_s3_object: Display converted image.")
+    img.show()
 
     return img
 
