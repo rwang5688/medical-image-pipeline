@@ -28,7 +28,7 @@ def get_event_vars(event):
     config.redacted_box_color = event['redacted_box_color']
 
     # DEBUG
-    print("get_env_vars:")
+    print("get_event_vars:")
     print("profile_name: %s" % (config.profile_name))
     print("region_name: %s" % (config.region_name))
     print("png_bucket_name: %s" % (config.png_bucket_name))
@@ -110,8 +110,6 @@ if __name__ == '__main__':
     event['redacted_box_color'] = 'red'
     # create test context
     context = {}
-    # This is a test
-    config.is_test = True
     # Execute test
     lambda_handler(event, context)
 

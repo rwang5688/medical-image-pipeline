@@ -9,5 +9,7 @@ dcm_object_name = ""
 png_bucket_name = ""
 de_id_png_bucket_name = ""
 
-# Is this a test?
-is_test = False
+# Pipeline parameters
+dpi = "72"
+phi_detection_threshold = "0.00"
+redacted_box_color = "red"
