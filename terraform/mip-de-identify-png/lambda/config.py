@@ -13,9 +13,6 @@ dpi = 72
 phi_detection_threshold = 0.00
 redacted_box_color = 'red'
 
-# Is this a test?
-is_test = False
-
 # Rekognition outputs
 detected_texts_list = None
 text_block = ""
