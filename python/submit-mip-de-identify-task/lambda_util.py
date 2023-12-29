@@ -17,7 +17,7 @@ def get_lambda_client():
     return lmb
     
 
-def de_identify_png_async(source_bucket_name, source_object_prefix, source_object_name):
+def dcm_to_png_async(source_bucket_name, source_object_prefix, source_object_name):
     lmb = get_lambda_client()
     if lmb is None:
         print('de_identify_png_async: Failed to get lambda client.')
@@ -27,17 +27,18 @@ def de_identify_png_async(source_bucket_name, source_object_prefix, source_objec
         payload = {}
         payload["profile_name"] = config.profile_name
         payload["region_name"] = config.region_name
-        payload["png_bucket_name"] = source_bucket_name
-        payload["png_object_prefix"] = source_object_prefix
-        payload["png_object_name"] = source_object_name
+        payload["dcm_bucket_name"] = source_bucket_name
+        payload["dcm_object_prefix"] = source_object_prefix
+        payload["dcm_object_name"] = source_object_name
+        payload["de_id_png_bucket_name"] = config.png_bucket_name
         payload["de_id_png_bucket_name"] = config.de_id_png_bucket_name
         payload["dpi"] = config.dpi
         payload["phi_detection_threshold"] = config.phi_detection_threshold
         payload["redacted_box_color"] = config.redacted_box_color
-        print("de_identify_png_async: Invoke mip-de-identify-png with payload({})".format(payload))
+        print("de_identify_png_async: Invoke mip-dcm-to-png with payload({})".format(payload))
         
         status = lmb.invoke(
-                FunctionName='mip-de-identify-png',
+                FunctionName='mip-dcm-to-png',
                 InvocationType='Event',
                 Payload=json.dumps(payload),
                 )
