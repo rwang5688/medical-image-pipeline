@@ -1,12 +1,12 @@
 {
-    "profile_name": "",
-    "region_name": "us-west-2",
-    "dcm_bucket_name": "medical-images-dcm-1234567890ab-us-west-2",
-    "dcm_object_prefix": "test/",
-    "dcm_object_name": "image.dcm",
-    "png_bucket_name": "medical-images-png-1234567890ab-us-west-2",
-    "de_id_png_bucket_name": "medical-images-de-id-png-1234567890ab-us-west-2",
-    "dpi": "72",
-    "phi_detection_threshold": "0.00",
-    "redacted_box_color": "red"
+  "profile_name": "",
+  "region_name": "us-west-2",
+  "dcm_bucket_name": "medical-images-dcm-1234567890ab-us-west-2",
+  "dcm_object_prefix": "test/",
+  "dcm_object_name": "image.dcm",
+  "png_bucket_name": "medical-images-png-1234567890ab-us-west-2",
+  "de_id_png_bucket_name": "medical-images-de-id-png-1234567890ab-us-west-2",
+  "dpi": "72",
+  "phi_detection_threshold": "0.00",
+  "redacted_box_color": "red"
 }
