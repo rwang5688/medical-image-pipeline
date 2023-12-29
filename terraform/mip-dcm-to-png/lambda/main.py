@@ -70,8 +70,7 @@ def lambda_handler(event, context):
         source_object_prefix = config.dcm_object_prefix
         source_object_name = config.dcm_object_name.split(".")[-2] + '.png'
         dest_bucket_name = config.de_id_png_bucket_name
-        success = lambda_util.de_identify_png_async(source_bucket_name, source_object_prefix, source_object_name, \
-            dest_bucket_name)
+        success = lambda_util.de_identify_png_async(source_bucket_name, source_object_prefix, source_object_name)
         if success:
             print("Async invoke succeeded.")
         else:
