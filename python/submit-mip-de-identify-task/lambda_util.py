@@ -30,7 +30,7 @@ def dcm_to_png_async(source_bucket_name, source_object_prefix, source_object_nam
         payload["dcm_bucket_name"] = source_bucket_name
         payload["dcm_object_prefix"] = source_object_prefix
         payload["dcm_object_name"] = source_object_name
-        payload["de_id_png_bucket_name"] = config.png_bucket_name
+        payload["png_bucket_name"] = config.png_bucket_name
         payload["de_id_png_bucket_name"] = config.de_id_png_bucket_name
         payload["dpi"] = config.dpi
         payload["phi_detection_threshold"] = config.phi_detection_threshold
