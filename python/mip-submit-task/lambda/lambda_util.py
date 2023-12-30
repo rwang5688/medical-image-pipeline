@@ -20,7 +20,7 @@ def get_lambda_client():
 def dcm_to_png_async(source_bucket_name, source_object_prefix, source_object_name):
     lmb = get_lambda_client()
     if lmb is None:
-        print('de_identify_png_async: Failed to get lambda client.')
+        print('dcm_to_png_async: Failed to get lambda client.')
         return False
         
     try:
@@ -35,7 +35,7 @@ def dcm_to_png_async(source_bucket_name, source_object_prefix, source_object_nam
         payload["dpi"] = config.dpi
         payload["phi_detection_threshold"] = config.phi_detection_threshold
         payload["redacted_box_color"] = config.redacted_box_color
-        print("de_identify_png_async: Invoke mip-dcm-to-png with payload({})".format(payload))
+        print("dcm_to_png_async: Invoke mip-dcm-to-png with payload({})".format(payload))
         
         status = lmb.invoke(
                 FunctionName='mip-dcm-to-png',
@@ -43,10 +43,10 @@ def dcm_to_png_async(source_bucket_name, source_object_prefix, source_object_nam
                 Payload=json.dumps(payload),
                 )
     except ClientError as e:
-        logging.error("de_identify_png_async: unexpected error: ")
+        logging.error("dcm_to_png_async: unexpected error: ")
         logging.exception(e)
         return False
 
     return True
-    
+
     
