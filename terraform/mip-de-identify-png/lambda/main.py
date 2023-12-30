@@ -1,3 +1,5 @@
+import argparse
+import json
 import logging
 from pprint import pformat
 
@@ -97,19 +99,22 @@ def lambda_handler(event, context):
 
 
 if __name__ == '__main__':
-    # Create test event
-    event = {}
-    event['profile_name'] = ''
-    event['region_name'] = 'us-west-2'
-    event['png_bucket_name'] = 'medical-images-png-1234567890ab-us-west-2'
-    event['png_object_prefix'] = 'test/'
-    event['png_object_name'] = 'image.png'
-    event['de_id_png_bucket_name'] = 'medical-images-de-id-png-1234567890ab-us-west-2'
-    event['dpi'] = '72'
-    event['phi_detection_threshold'] = '0.00'
-    event['redacted_box_color'] = 'red'
+    # read arguments
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-t", "--task-spec", required=True, help="Task specification.")
+    args = vars(ap.parse_args())
+    print("mip-de-identify-png: args = %s" % (args))
+
+    # load json file
+    task_spec_file_name = args['task_spec']
+    f = open(task_spec_file_name)
+    event = json.load(f)
+    f.close()
+    print("mip-de-identify-png: task_spec = %s" % (event))
+
     # create test context
     context = {}
+    
     # Execute test
     lambda_handler(event, context)
 
