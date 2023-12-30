@@ -2,5 +2,5 @@
 
 echo "[CMD] python main.py"
 cd lambda
-python ./main.py
+python ./main.py --task-spec ../$1
 cd ..
