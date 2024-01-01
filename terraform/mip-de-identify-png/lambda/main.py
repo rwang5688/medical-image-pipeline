@@ -64,7 +64,10 @@ def lambda_handler(event, context):
         print("offset_array: %s" % (config.offset_array))
         print("total_offsets: %d" % (config.total_offsets))
         print("==")
-
+    else: # this only happens if detected_texts_list is None!
+        print("mip-de-identify-png: Failed to execute rekognition.detect_text().  Skipping.")
+        return
+    
     # get detected PHIs and bounding boxes from detected texts
     success = comprehend_medical_util.get_phi_boxes_list_from_detected_texts()
     if success:
@@ -77,13 +80,16 @@ def lambda_handler(event, context):
         print("phi_boxes_list: %s" % (config.phi_boxes_list))
         print("not_redacted: %d" % (config.not_redacted))
         print("==")
-
+    else: # this only happens if detected_texts_list is None!
+        print("mip-de-identify-png: Failed to execute comprehendmedical.detect_phi().  Skipping.")
+        return
+        
     # get image pixel array from S3 object
     source_bucket_name = config.png_bucket_name
     source_object_prefix = config.png_object_prefix
     source_object_name = config.png_object_name
     img = image_util.get_image_from_s3_object(source_bucket_name, source_object_prefix, source_object_name)
-
+    
     # redact and put image pixel array as S3 object in PNG format
     dest_bucket_name = config.de_id_png_bucket_name
     dest_object_prefix = config.png_object_prefix
@@ -93,7 +99,7 @@ def lambda_handler(event, context):
         print("==")
         print("Successfully executed redact_and_put_image_as_s3_object ...")
         print("==")
-    
+        
     # end
     print('\n... Thaaat\'s all, Folks!')
 

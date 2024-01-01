@@ -19,22 +19,30 @@ def get_comprehendmedical_client():
 
 
 def get_phi_boxes_list_from_detected_texts():
+    if config.text_block == "":
+        print('get_phi_boxes_list_from_detected_texts: No detected text. => No detected PHI.')
+        config.detected_phi_list = []
+        config.phi_texts_list = []
+        config.phi_boxes_list = []
+        config.not_redacted = 0
+        return True
+        
     cm = get_comprehendmedical_client()
     if cm is None:
         print('get_phi_boxes_list_from_detected_texts: Failed to get comprehendmedical client.')
         return False
-    
-    config.detected_phi_list = None
+        
     try:
         #Call Amazon Comprehend Medical and pass it the aggregated text from our medical image.
-        config.detected_phi_list=cm.detect_phi(Text = config.text_block)
+        response = cm.detect_phi(Text=config.text_block) # CM requires non-empty text block!
+        config.detected_phi_list = response['Entities']
     except ClientError as e:
         logging.error("get_phi_boxes_list_from_detected_texts: unexpected error: ")
         logging.exception(e)
         return False
 
     if config.detected_phi_list is None:
-         print('get_phi_boxes_list_from_detected_texts: Failed to get PHI list.')
+         print('get_phi_boxes_list_from_detected_texts: Failed to execute comprehendmedical.detect_phi().')
          return False
     
     #Amazon Comprehend Medical will return a JSON object that contains all of the PHI detected in the text block with
@@ -47,7 +55,7 @@ def get_phi_boxes_list_from_detected_texts():
     config.phi_boxes_list = []
     config.not_redacted = 0
 
-    for phi in config.detected_phi_list['Entities']:
+    for phi in config.detected_phi_list:
         phi_score = phi['Score']
         phi_text = phi['Text']
         phi_type = phi['Type']

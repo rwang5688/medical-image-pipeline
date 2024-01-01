@@ -80,9 +80,12 @@ resource "aws_lambda_function" "lambda" {
   function_name    = "${var.lambda_name}"
   role             = "${aws_iam_role.lambda_iam.arn}"
   handler          = "main.lambda_handler"
-  memory_size      = 10240
   runtime          = "python3.9"
   source_code_hash = "${data.archive_file.lambda_zip.output_base64sha256}"
+  ephemeral_storage {
+    size           = 10240
+  }
+  memory_size      = 10240
   timeout          = 900
 }
 
