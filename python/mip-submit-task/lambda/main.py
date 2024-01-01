@@ -57,6 +57,8 @@ def lambda_handler(event, context):
 
     # foreach dcm object, async invoke de-identify-png Lambda function
     n_dcm_objects = 0
+    n_succeeded = 0
+    n_failed = 0
     for dcm_object_key in dcm_object_keys:
         print("==")
 
@@ -87,15 +89,19 @@ def lambda_handler(event, context):
             success = lambda_util.dcm_to_png_async(source_bucket_name, source_object_prefix, source_object_name)
             n_dcm_objects += 1
             if success:
+                n_succeeded += 1
                 print("Async invoke succeeded for DCM object #%d: %s." % \
                     (n_dcm_objects, source_object_prefix+source_object_name))
             else:
+                n_failed += 1
                 print("Async invoke failed for DCM object #%d: %s." % \
                     (n_dcm_objects, source_object_prefix+source_object_name))
         
         print("==")
 
-    print ("mip-submit-task: Processed %d DCM objects." % (n_dcm_objects))
+    print("mip-submit-task: Processed %d DCM objects." % (n_dcm_objects))
+    print("mip-submit-task: %d succeeded; %d failed." % (n_succeeded, n_failed))
+    
     # end
     print('\n... Thaaat\'s all, Folks!')
 

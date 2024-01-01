@@ -23,8 +23,7 @@ def get_detected_texts_from_s3_object(source_bucket_name, source_object_prefix, 
     if rkg is None:
         print('get_detected_texts_from_s3_object: Failed to get rekognition client.')
         return False
-    
-    config.detected_texts_list = None
+        
     try:
         #Use Amazon Rekognition to detect all of the text in the medical image
         source_object_key = source_object_prefix + source_object_name
@@ -36,7 +35,7 @@ def get_detected_texts_from_s3_object(source_bucket_name, source_object_prefix, 
         return False
 
     if config.detected_texts_list is None:
-         print('get_detected_texts_from_s3_object: Failed to get text detections.')
+         print('get_detected_texts_from_s3_object: Failed to execute rekognition.detect_text().')
          return False
 
     #The various text detections are returned in a JSON object.  Aggregate the text into a single large block and
