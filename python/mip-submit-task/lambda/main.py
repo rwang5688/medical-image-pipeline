@@ -1,4 +1,5 @@
 import argparse
+from datetime import datetime
 import json
 import logging
 from pprint import pformat
@@ -42,6 +43,10 @@ def get_event_vars(event):
 
 
 def lambda_handler(event, context):
+    # print start datetime
+    now = datetime.now()
+    print("Start dateime: %s" % (now))
+
     # start
     print('\nStarting submit_mip_de_identify_task.lambda_handler ...')
     LOGGER.info("%s", pformat({"Context" : context, "Request": event}))
@@ -104,6 +109,10 @@ def lambda_handler(event, context):
     
     # end
     print('\n... Thaaat\'s all, Folks!')
+
+    # print end datetime
+    now = datetime.now()
+    print("End dateime: %s" % (now))
 
 
 if __name__ == '__main__':
